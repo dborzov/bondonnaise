@@ -13,6 +13,7 @@ class BondCSV:
         bond["term_f"] = unmarshall("([\.\d+]+) years*", bond["term"])
         assert bond["term_f"] > 0
         assert 'yield' in bond
+        assert bond['type'] in ['government', 'corporate']
         bond["yield_f"] = unmarshall("([\.\d+]+)\%", bond["yield"])
         return bond
 
