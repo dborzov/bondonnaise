@@ -26,13 +26,17 @@ python -m unittest discover -v
 ```
 
 # Algorithm
-We read the csv and load all the dcitionaries for government bonds in a hash table `bonds_gov`:
+We read the csv to:
+1) make a list of corporate bonds
+1) make the list of unique values for unique government bond's terms
+3) load all the government bonds in a hash table `bonds_gov` with the term value used as key:
 ```
 bonds_gov dict[float(bond's term)]-> list of bonds with this term
 ```
-and the list of unique values for unique government bond's terms.
+Using a list accounts for the possibility of government bonds with the same term value.
 
-We then traverse through the list of corporate bonds to identify the closest smaller and higher value with a binary search:
+
+We then traverse through the list of corporate bonds to identify the closest smaller and higher value of government bond terms with a binary search:
 ```
 low = 0; high = len(l)-1
 while low +1 < high:
@@ -46,4 +50,4 @@ while low +1 < high:
         low = mid
 return low,high
 ```
-For challenge 1 we get the one closer by absolute value, and for challenge 2 we use those bounds for linear interpolation.
+For challenge 1 we get the one closer by absolute value, and for challenge 2 we use those bounds for linear interpolation. If there are several government bonds with the same term value, we take the average of the yield instead.
