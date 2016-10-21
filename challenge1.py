@@ -1,15 +1,24 @@
-from bondspread import BondCSV, closest
-from collections import defaultdict
+from bondspread import load_bond_csv, closest
 
-bonds_gov = defaultdict(list); bonds_corp = []
-for bond in BondCSV('problem/sample_input.csv'):
-    if bond['type']=='government':
-        bonds_gov[bond['term_f']].append(bond)
-    elif bond['type']=='corporate':
-        bonds_corp.append(bond)
+def identify_benchmarks(bonds_gov, bonds_corp):
+    gov_terms = sorted(bonds_gov.keys())
+    if len(gov_terms)==0:
+        raise Error('No government bonds loaded')
+    for cb in bonds_corp:
+        closest_term = closest(gov_terms, cb['term_f'])
+        cb['benchmark'] = bonds_gov[closest_term][0]
+        cb['spread_to_benchmark'] = cb['yield_f'] - cb['benchmark']['yield_f']
+    return bonds_corp
 
-gov_terms = sorted(bonds_gov.keys())
-print "Government terms: ", gov_terms
-for each in bonds_corp:
-    closest_term = closest(gov_terms, each['term_f'])
-    print 'For {}({}) the closest val is {}'.format(each['bond'], each['term_f'], gov_terms[closest_term])
+bonds_gov, bonds_corp = load_bond_csv('problem/sample_input.csv')
+bonds_corp = identify_benchmarks(bonds_gov, bonds_corp)
+
+with open('challenge1.csv','wb') as ch1:
+    ch1.write('bond,benchmark,spread_to_benchmark\n')
+    for bc in bonds_corp:
+        p = {
+            "bond": bc['bond'],
+            "benchmark": bc['benchmark']['bond'],
+            "spread_to_benchmark": bc['spread_to_benchmark']
+        }
+        ch1.write("{bond},{benchmark},{spread_to_benchmark}%\n".format(**p))
