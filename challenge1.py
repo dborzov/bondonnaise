@@ -10,7 +10,7 @@ def identify_benchmarks(bonds_gov, bonds_corp):
         cb['spread_to_benchmark'] = cb['yield_f'] - cb['benchmark']['yield_f']
     return bonds_corp
 
-bonds_gov, bonds_corp = load_bond_csv('problem/sample_input.csv')
+bonds_gov, bonds_corp = load_bond_csv('input.csv')
 bonds_corp = identify_benchmarks(bonds_gov, bonds_corp)
 
 with open('challenge1.csv','wb') as ch1:

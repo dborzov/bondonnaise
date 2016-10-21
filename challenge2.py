@@ -10,7 +10,7 @@ def interpolate_spread(bonds_gov, bonds_corp):
     return bonds_corp
 
 
-bonds_gov, bonds_corp = load_bond_csv('problem/sample_input.csv')
+bonds_gov, bonds_corp = load_bond_csv('input.csv')
 bonds_corp = interpolate_spread(bonds_gov, bonds_corp)
 
 with open('challenge2.csv','wb') as ch1:
